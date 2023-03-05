@@ -27,15 +27,23 @@ struct Cli {
     row_size: usize,
 }
 
-fn blockify<W: Write>(input: &[u8], output: W, fg: Color, bg: Color, block_size: usize, row_size: usize) -> Result<()> {
+fn blockify<W: Write>(
+    input: &[u8],
+    output: W,
+    fg: Color,
+    bg: Color,
+    block_size: usize,
+    row_size: usize,
+) -> Result<()> {
     // TODO Re-implement blockies.
     let gen = blockies::Classic {
         color: Some(fg),
-        size: row_size, // in blocks
+        size: row_size,    // in blocks
         scale: block_size, // in pixels
         background_color: Some(bg),
     };
-    gen.create_icon(output, input).map_err(|e| anyhow!("blockies failure: {:?}", e))
+    gen.create_icon(output, input)
+        .map_err(|e| anyhow!("blockies failure: {:?}", e))
 }
 
 fn color_parse(rgb_string: &str, alpha: u8) -> Result<Color> {
@@ -44,8 +52,11 @@ fn color_parse(rgb_string: &str, alpha: u8) -> Result<Color> {
         rgb.push(num.parse()?)
     }
     match rgb[..] {
-        [r, g, b] => Ok(Color::Rgba(r,  g, b, alpha)),
-        _ => Err(anyhow!("Invalid number of RGB components in: {:?}", rgb_string))
+        [r, g, b] => Ok(Color::Rgba(r, g, b, alpha)),
+        _ => Err(anyhow!(
+            "Invalid number of RGB components in: {:?}",
+            rgb_string
+        )),
     }
 }
 
@@ -61,6 +72,13 @@ fn main() -> Result<()> {
         buf
     };
     let mut output = std::io::stdout();
-    blockify(&input[..], &mut output, fg, bg, cli.block_size, cli.row_size)?;
+    blockify(
+        &input[..],
+        &mut output,
+        fg,
+        bg,
+        cli.block_size,
+        cli.row_size,
+    )?;
     Ok(())
 }
