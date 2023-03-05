@@ -17,14 +17,22 @@ struct Cli {
 
     #[arg(long = "bg-alpha", default_value = "0")]
     bg_alpha: u8,
+
+    /// in pixels
+    #[arg(long = "block-size", default_value = "8")]
+    block_size: usize,
+
+    /// in blocks
+    #[arg(long = "row-size", default_value = "8")]
+    row_size: usize,
 }
 
-fn blockify<W: Write>(input: &[u8], output: W, fg: Color, bg: Color) -> Result<()> {
+fn blockify<W: Write>(input: &[u8], output: W, fg: Color, bg: Color, block_size: usize, row_size: usize) -> Result<()> {
     // TODO Re-implement blockies.
     let gen = blockies::Classic {
         color: Some(fg),
-        size: 8,
-        scale: 8,
+        size: row_size, // in blocks
+        scale: block_size, // in pixels
         background_color: Some(bg),
     };
     gen.create_icon(output, input).map_err(|e| anyhow!("blockies failure: {:?}", e))
@@ -53,6 +61,6 @@ fn main() -> Result<()> {
         buf
     };
     let mut output = std::io::stdout();
-    blockify(&input[..], &mut output, fg, bg)?;
+    blockify(&input[..], &mut output, fg, bg, cli.block_size, cli.row_size)?;
     Ok(())
 }
