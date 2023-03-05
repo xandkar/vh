@@ -6,4 +6,5 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.69"
 blockies = "0.3.0"
+clap = { version = "4.1.8", features = ["derive"] }
 pixelate = "0.1.0"
