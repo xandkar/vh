@@ -4,6 +4,12 @@ vh
 Visual hash CLI tool. Currently based only on eth blockies.
 
 
+build and install
+-------------------------------------------------------------------------------
+
+    cargo install --git https://github.com/xandkar/vh.git
+
+
 example
 -------------------------------------------------------------------------------
 
